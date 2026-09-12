@@ -1,2 +1,109 @@
 <!doctype html>
-<!-- see artifacts/desk-site/index.html for source; placeholder if push truncated -->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Desk — full slate, filter decides the count</title>
+  <meta name="description" content="Every Week 2 game is clerked. The filter decides how many are worth action. Action Network never mints a TAKE." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #070b09; --fg: #e7f2ea; --card: #0e1310; --muted: #8f9d94; --subtle: #6a7a70;
+      --primary: #8fe39a; --watch: #c4b48a; --neg: #e08b7a; --paper: #8fb4e0; --elev: #141c17; --border: #1a2c22;
+      --hair: color-mix(in oklab, #8fe39a 16%, transparent);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--fg); font-family: Sora, system-ui, sans-serif; }
+    body { min-height: 100dvh; background: radial-gradient(120% 80% at 50% -10%, color-mix(in oklab, var(--primary) 14%, transparent), transparent 55%), var(--bg); padding-bottom: 5.5rem; }
+    button { font: inherit; color: inherit; cursor: pointer; }
+    .wrap { max-width: 44rem; margin: 0 auto; }
+    .top { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px 8px; }
+    .kicker { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin: 0; }
+    h1 { font-size: 1.05rem; margin: 4px 0 0; letter-spacing: -.03em; }
+    .tabs { display: flex; gap: 6px; }
+    .tabs button, .dock button, .market button { height: 44px; padding: 0 14px; border: 0; background: var(--elev); color: var(--muted); font-size: .8125rem; font-weight: 600; }
+    .tabs button.on, .dock button.on, .market button.on { background: var(--primary); color: var(--bg); }
+    .season { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; padding: 0 16px 12px; font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--primary); }
+    .note { margin: 0 16px 14px; padding: 14px; background: var(--card); box-shadow: inset 0 0 0 1px var(--hair); }
+    .note p { margin: 0; }
+    .note .lbl { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; }
+    .note .lbl.take { color: var(--primary); }
+    .note .lbl.watch { color: var(--watch); }
+    .note .lbl.sit { color: var(--muted); }
+    .note .body { margin-top: 8px; font-size: .875rem; line-height: 1.5; color: var(--muted); }
+    .market { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 4px 16px 10px; position: sticky; top: 0; background: color-mix(in oklab, var(--bg) 92%, transparent); backdrop-filter: blur(10px); z-index: 5; }
+    .day { padding: 16px 16px 8px; font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--primary); }
+    .stack { display: flex; flex-direction: column; gap: 10px; padding: 4px 16px 8px; }
+    .ticket { display: block; width: 100%; text-align: left; background: var(--card); border: 0; padding: 14px; box-shadow: inset 0 0 0 1px var(--hair), 6px 6px 0 color-mix(in oklab, var(--primary) 12%, transparent); }
+    .ticket.live { box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--watch) 55%, transparent), 6px 6px 0 color-mix(in oklab, var(--watch) 18%, transparent); }
+    .ticket.sit { opacity: .78; box-shadow: inset 0 0 0 1px var(--border); }
+    .row { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+    .rank { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--primary); }
+    .rank.watch { color: var(--watch); }
+    .rank.sit { color: var(--muted); }
+    .rank.loss { color: var(--neg); }
+    .meta { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .pick { margin-top: 8px; display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+    .pick strong { font-size: 1.25rem; letter-spacing: -.03em; }
+    .juice { font-family: "IBM Plex Mono", monospace; font-size: .875rem; }
+    .match { margin-top: 8px; font-size: .875rem; }
+    .match span { color: var(--muted); }
+    .why { margin-top: 8px; font-size: .8125rem; line-height: 1.45; color: var(--muted); }
+    .score { margin-top: 8px; font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .prose { padding: 8px 16px 24px; }
+    .prose h2 { font-size: 1.35rem; letter-spacing: -.03em; margin: 1.5rem 0 .4rem; }
+    .prose p, .prose li { color: var(--muted); font-size: .9rem; line-height: 1.55; }
+    .prose ol { padding-left: 1.2rem; }
+    .dock { position: fixed; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; padding: 8px 16px calc(8px + env(safe-area-inset-bottom)); background: color-mix(in oklab, var(--bg) 92%, transparent); border-top: 1px solid var(--border); backdrop-filter: blur(10px); }
+    .hidden { display: none; }
+    .tag { font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--subtle); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div>
+        <p class="kicker" id="leagueKicker">CFB W2</p>
+        <h1 id="pageTitle">Full slate</h1>
+      </div>
+      <nav class="tabs" aria-label="League">
+        <button type="button" class="on" id="btnCfb">CFB</button>
+        <button type="button" id="btnNfl">NFL</button>
+      </nav>
+    </header>
+    <p class="season">Season <span>Unders 5–4</span> <span style="color:var(--watch)">Watch 2–3</span></p>
+    <div id="cfb">
+      <div class="market">
+        <button type="button" class="on" id="btnUnders">Unders</button>
+        <button type="button" id="btnWatch">Spreads</button>
+        <button type="button" id="btnSits">Clerk</button>
+      </div>
+      <div id="underBoard"></div>
+      <div id="watchBoard" class="hidden"></div>
+      <div id="sitBoard" class="hidden"></div>
+    </div>
+    <div id="nfl" class="hidden"></div>
+    <div id="notes" class="hidden prose">
+      <p class="kicker">Notes</p>
+      <h2>The cap is gone. The filter is not.</h2>
+      <p>Every Week 2 game is run through the locked rules. The website no longer stops at 10 unders or 7 watches. The count of games worth action is the output of the filter. It can be 5, 10, or 20.</p>
+      <h2>CFB unders — W12_T55_U_v1</h2>
+      <p>Weeks 1–2, FBS vs FBS, under if any shopped total is 55 or higher. Skip −115 or worse. Paper if Pinnacle already has the study in the price, or if Action money on the over is 65% or more. Week 2 size is 1u at −105 or better, else 0.5u. Saturday correlation cap 3.0u — warn, do not auto-drop, do not size up. FCS vs FBS is a price on the board, not a ticket.</p>
+      <p>Study: 56.4% on n=473. Totals are ESPN shopped numbers. Action week-2 totals splits were not on the 9/9 stamp. Do not invent over-money.</p>
+      <h2>CFB spreads — watch only</h2>
+      <p>Frozen week-2 leans stay the only watches. Every other spread is clerked with the Action 9/9/26 6:14 p.m. MT board and then sits. Splits confirm or kill. They do not add a ticket.</p>
+      <h2>NFL — NFL_W1_OLGAP_v0</h2>
+      <p>Spreads only. Totals stay sit. OL gap of 15 or more is the cut. Top-10 EDGE can veto. Laying 7 or more is a trap. Action money on the TAKE after the line moved sits that game.</p>
+    </div>
+  </div>
+  <nav class="dock" aria-label="Desk">
+    <button type="button" class="on" id="tabPicks">Picks</button>
+    <button type="button" id="tabNflDock">NFL</button>
+    <button type="button" id="tabNotes">Notes</button>
+    <button type="button" id="tabResults">Results</button>
+  </nav>
+<script src="desk.js"></script>
+</body>
+</html>
