@@ -1,93 +1,61 @@
-/* Locked filter applied to the full ESPN W2 slate. Action never adds a ticket. */
+/* Action 3:18p MT 9/12 clerk. Spreads are the board. Filter decides the count. */
 const TAKES = [
-  {rank:1, line:"Under 66.5", juice:"ESPN", away:"UTSA", home:"Texas State", kick:"Sat 3:30p ET", why:"Highest total on the slate. Logged W2 card #1.", tag:"logged", key:"utsa"},
-  {rank:2, line:"Under 59.5", juice:"ESPN", away:"Charlotte", home:"Ole Miss", kick:"Sat 7:45p ET", why:"Logged W2 card #2. Line came in from 61.5. Still >=55.", tag:"logged", key:"charlotte"},
-  {rank:3, line:"Under 59.5", juice:"ESPN", away:"Louisiana", home:"USC", kick:"Sat 11:00p ET", why:"Logged W2 card #3. Still >=55.", tag:"logged", key:"louisiana"},
-  {rank:4, line:"Under 58.5", juice:"ESPN", away:"Navy", home:"Florida Atlantic", kick:"Sat 7:30p ET", why:"Logged W2 card #4.", tag:"logged", key:"navy"},
-  {rank:5, line:"Under 58.5", juice:"ESPN", away:"UNLV", home:"North Texas", kick:"Sat 3:45p ET", why:"Logged W2 card #6. Total pushed 56.5 to 58.5.", tag:"logged", key:"unlv"},
-  {rank:6, line:"Under 56.5", juice:"ESPN", away:"App State", home:"East Carolina", kick:"Sat 12:00p ET", why:"Filter add. FBS-FBS, shopped total 56.5.", tag:"add", key:"appst"},
-  {rank:7, line:"Under 56.5", juice:"ESPN", away:"California", home:"Syracuse", kick:"Sat 3:30p ET", why:"Filter add. Dome. Indoor is a tag on the same ticket.", tag:"add", key:"cal"},
-  {rank:8, line:"Under 56.5", juice:"ESPN", away:"Southern Miss", home:"Auburn", kick:"Sat 7:45p ET", why:"Logged W2 card #7.", tag:"logged", key:"usm"},
-  {rank:9, line:"Under 56.5", juice:"ESPN", away:"Middle Tennessee", home:"Marshall", kick:"Sat 7:00p ET", why:"Filter add. FBS-FBS at 56.5.", tag:"add", key:"mtsu"},
-  {rank:10, line:"Under 55.5", juice:"ESPN", away:"Oregon", home:"Oklahoma State", kick:"Sat 12:00p ET", why:"Logged W2 card #5. Total came in from 57.5.", tag:"logged", key:"oregon"},
-  {rank:11, line:"Under 55.5", juice:"ESPN", away:"Western Kentucky", home:"Georgia", kick:"Sat 12:45p ET", why:"Logged W2 card #8.", tag:"logged", key:"wku"},
-  {rank:12, line:"Under 55.5", juice:"ESPN", away:"Rice", home:"Notre Dame", kick:"Sat 3:30p ET", why:"Logged W2 card #9.", tag:"logged", key:"rice"},
-  {rank:13, line:"Under 55.5", juice:"ESPN", away:"Utah State", home:"Washington", kick:"Sat 3:30p ET", why:"Logged W2 card #10.", tag:"logged", key:"usu"},
-  {rank:14, line:"Under 55.5", juice:"ESPN", away:"UCF", home:"Pittsburgh", kick:"Sat 3:30p ET", why:"Filter add. Shopped total now 55.5.", tag:"add", key:"ucf"},
-  {rank:15, line:"Under 55.5", juice:"ESPN", away:"Tennessee", home:"Georgia Tech", kick:"Sat 7:00p ET", why:"Filter add. Floor total.", tag:"add", key:"tenn"},
-  {rank:16, line:"Under 55.5", juice:"ESPN", away:"Memphis", home:"Boise State", kick:"Sat 6:00p ET", why:"Filter add. FBS-FBS at 55.5.", tag:"add", key:"mem"},
-  {rank:17, line:"Under 55.5", juice:"ESPN", away:"Louisiana Tech", home:"LSU", kick:"Sat 7:30p ET", why:"Filter add. LA Tech is FBS.", tag:"add", key:"latech"},
-  {rank:18, line:"Under 55.5", juice:"ESPN", away:"Georgia Southern", home:"Clemson", kick:"Sat 7:30p ET", why:"Filter add. Floor total.", tag:"add", key:"gaso"},
-  {rank:19, line:"Under 55.5", juice:"ESPN", away:"Arkansas", home:"Utah", kick:"Sat 10:15p ET", why:"Filter add. Shopped total 55.5.", tag:"add", key:"ark"}
+  {rank:1, line:"Under 66", juice:"-110 FD", away:"UTSA", home:"Texas State", kick:"Sat 3:30p ET", why:"Highest total. Filter TAKE.", tag:"logged", key:"utsa"},
+  {rank:2, line:"Under 59.5", juice:"-110 FD", away:"Navy", home:"Florida Atlantic", kick:"Sat 7:30p ET", why:"FBS–FBS, shopped total >=55.", tag:"logged", key:"navy"},
+  {rank:3, line:"Under 59.5", juice:"-110 FD", away:"Charlotte", home:"Ole Miss", kick:"Sat 7:45p ET", why:"FBS–FBS, shopped total >=55.", tag:"logged", key:"charlotte"},
+  {rank:4, line:"Under 58.5", juice:"-110 FD", away:"UNLV", home:"North Texas", kick:"Sat 3:45p ET", why:"FBS–FBS, shopped total >=55.", tag:"logged", key:"unlv"},
+  {rank:5, line:"Under 58.5", juice:"-110 FD", away:"Louisiana", home:"USC", kick:"Sat 11:00p ET", why:"FBS–FBS, shopped total >=55.", tag:"logged", key:"louisiana"},
+  {rank:6, line:"Under 58", juice:"-110 FD", away:"Utah State", home:"Washington", kick:"Final 14-16", why:"52 total. Under 58.", tag:"logged", key:"usu", final:"14-16", result:"W"},
+  {rank:7, line:"Under 57.5", juice:"-110 FD", away:"California", home:"Syracuse", kick:"Sat 3:30p ET", why:"Filter add.", tag:"add", key:"cal"},
+  {rank:8, line:"Under 56.5", juice:"-110 FD", away:"App State", home:"East Carolina", kick:"Final 27-24", why:"51 total.", tag:"add", key:"appst", final:"27-24", result:"W"},
+  {rank:9, line:"Under 56.5", juice:"-110 FD", away:"Southern Miss", home:"Auburn", kick:"Sat 7:45p ET", why:"Filter TAKE.", tag:"logged", key:"usm"},
+  {rank:10, line:"Under 55.5", juice:"-110 FD", away:"Oregon", home:"Oklahoma State", kick:"Final 31-39", why:"70 total. Favorite lost and both sides scored.", tag:"logged", key:"oregon", final:"31-39", result:"L"},
+  {rank:11, line:"Under 55.5", juice:"-110 FD", away:"Western Kentucky", home:"Georgia", kick:"Final 20-70", why:"90 total. Power home favorite hung 50+.", tag:"logged", key:"wku", final:"20-70", result:"L"},
+  {rank:12, line:"Under 55.5", juice:"-110 FD", away:"UCF", home:"Pittsburgh", kick:"Sat 3:30p ET", why:"Filter add.", tag:"add", key:"ucf"},
+  {rank:13, line:"Under 55.5", juice:"-110 FD", away:"Georgia State", home:"Kennesaw State", kick:"Sat 7:00p ET", why:"Filter add.", tag:"add", key:"gsu"},
+  {rank:14, line:"Under 55.5", juice:"-110 FD", away:"Middle Tennessee", home:"Marshall", kick:"Sat 7:00p ET", why:"Filter add.", tag:"add", key:"mtsu"},
+  {rank:15, line:"Under 55.5", juice:"-110 FD", away:"Louisiana Tech", home:"LSU", kick:"Sat 7:30p ET", why:"Filter TAKE. Steam on LSU is a spread sit, not a total paper.", tag:"add", key:"latech"},
+  {rank:16, line:"Under 55.5", juice:"-110 FD", away:"Arkansas", home:"Utah", kick:"Sat 10:15p ET", why:"Filter add.", tag:"add", key:"ark"},
+  {rank:17, line:"Under 55.5", juice:"-110 FD", away:"Rice", home:"Notre Dame", kick:"Final 0-52", why:"52 total. Under 55.5.", tag:"logged", key:"rice", final:"0-52", result:"W"}
 ];
 const WATCHES = [
-  {rank:1, line:"North Texas +3.5", juice:"-110 FD", away:"UNLV", home:"North Texas", kick:"Sat 3:45p ET", why:"Public 66% UNLV. Money 59% UNT. UNLV -6.5 to -3.5. Reverse line move.", an:"Action 9/9 6:14p MT · 66% tix UNLV / 41% money", key:"unlv"},
-  {rank:2, line:"Rutgers +3.5", juice:"-110 FD", away:"Rutgers", home:"Boston College", kick:"Final 21-28", why:"Public 67% BC. Money 53% Rutgers. Dog +6.5 to +3.5. Lost by 7.", an:"Action 9/9 · 33% tix Rutgers / 53% money", key:"rutgers", final:"21-28", result:"L"},
-  {rank:3, line:"Purdue +3", juice:"-110 FD", away:"Wake Forest", home:"Purdue", kick:"Sat 12:00p ET", why:"41% tickets / 57% money on Purdue. Line held near a field goal.", an:"Action 9/9 · 59% tix Wake / 43% money", key:"purdue"},
-  {rank:4, line:"Texas State +1.5", juice:"+101 FD", away:"UTSA", home:"Texas State", kick:"Sat 3:30p ET", why:"Tickets 60% UTSA, money 53% Texas State.", an:"Action 9/9 · 60% tix UTSA / 47% money", key:"utsa"},
-  {rank:5, line:"Ohio State +2", juice:"-110 FD", away:"Ohio State", home:"Texas", kick:"Sat 7:30p ET", why:"58/66 on Ohio State +2 at Texas. Line held. ESPN now TEX -1.5.", an:"Action 9/9 · 58% tix Ohio State / 66% money", key:"ohiost"},
-  {rank:6, line:"Kansas +3", juice:"-110 FD", away:"Missouri", home:"Kansas", kick:"Fri 8:00p ET", why:"76/87 on Missouri. Line -5.5 to -3 against that public.", an:"Action 9/9 · 76% tix Missouri / 87% money", key:"kansas"},
-  {rank:7, line:"Mississippi State +1.5", juice:"-110 FD", away:"Mississippi State", home:"Minnesota", kick:"Sat 3:30p ET", why:"71/73 agree on Miss St. Follow, do not fade. Coin-toss only.", an:"Action 9/9 · 71% tix Miss St / 73% money", key:"msst"}
+  {rank:1, line:"North Texas +3", juice:"-110 FD", away:"UNLV", home:"North Texas", kick:"Sat 3:45p ET", why:"Public 63% UNLV. Line -6.5 → -3 against them. Money 12 off tickets on North Texas.", an:"Action 3:18p MT · 63% tix UNLV / 51% money · RLM+MONEY", key:"unlv", source:"action"},
+  {rank:2, line:"Florida Atlantic +3.5", juice:"-110 FD", away:"Navy", home:"Florida Atlantic", kick:"Sat 7:30p ET", why:"Public 72% Navy. Line -6.5 → -3.5 against them. Reverse line move.", an:"Action 3:18p MT · 72% tix Navy / 61% money · RLM", key:"navy", source:"action"},
+  {rank:3, line:"Rutgers +3", juice:"-110 FD", away:"Rutgers", home:"Boston College", kick:"Final 21-28", why:"Money 21 off tickets on Rutgers. Follow the money. Lost by 7.", an:"Action 3:18p MT · 44% tix Rutgers / 65% money · MONEY", key:"rutgers", source:"action", final:"21-28", result:"L"},
+  {rank:4, line:"UTSA +2.5", juice:"-110 FD", away:"UTSA", home:"Texas State", kick:"Sat 3:30p ET", why:"Money 12 off tickets on UTSA.", an:"Action 3:18p MT · 54% tix UTSA / 66% money · MONEY", key:"utsa", source:"action"},
+  {rank:5, line:"Buffalo +10", juice:"-110 FD", away:"Buffalo", home:"Florida International", kick:"Sat 6:00p ET", why:"Money 20 off tickets on Buffalo. Extended handle.", an:"Action 3:18p MT · 50% tix Buffalo / 70% money · MONEY", key:"buf", source:"action"},
+  {rank:6, line:"New Mexico State +7", juice:"-110 FD", away:"New Mexico State", home:"Hawaii", kick:"Sat 11:59p ET", why:"Money 21 off tickets on New Mexico State.", an:"Action 3:18p MT · 50/71 on NMSU · MONEY", key:"nmsu", source:"action"},
+  {rank:7, line:"Mississippi State PK", juice:"-110 FD", away:"Mississippi State", home:"Minnesota", kick:"Final 38-13", why:"77% tickets and 82% money on Miss St at a coin-toss number. Follow, do not fade. Covered PK 38-13.", an:"Action 3:18p MT · 77/82 · FOLLOW", key:"msst", source:"action", final:"38-13", result:"W"},
+  {rank:8, line:"Memphis +9.5", juice:"-110 FD", away:"Memphis", home:"Boise State", kick:"Sat 6:00p ET", why:"Money 15 off tickets on Memphis. Extended handle.", an:"Action 3:18p MT · 50/65 · MONEY", key:"mem", source:"action"}
+];
+const SAT_KEPT = [
+  {rank:null, line:"Purdue +3", juice:"-110 FD", away:"Wake Forest", home:"Purdue", kick:"Final 38-36 2OT", why:"3:18 clerk sat (58/50, gap 8). We kept the 9/9 logged side. Won by covering +3.", an:"Clerk sat · we kept it", key:"purdue", source:"sat", final:"38-36", result:"W"},
+  {rank:null, line:"Kansas +3", juice:"-110 FD", away:"Missouri", home:"Kansas", kick:"Final 38-21", why:"3:18 clerk sat (69/56, |4| outside toss). We kept the 9/9 logged side. Lost.", an:"Clerk sat · we kept it", key:"kansas", source:"sat", final:"38-21", result:"L"}
+];
+const FADE = [
+  {rank:null, line:"Army -3.5", juice:"-110 FD", away:"South Florida", home:"Army", kick:"Final 28-24", why:"USF was 75% tickets / 70% money at a coin-toss number. Clerk faded that follow and laid Army. USF won outright. Follow now vetoes reverse line move.", an:"Faded a 65/65 follow", key:"army", source:"fade", final:"28-24", result:"L"}
+];
+const STEAM = [
+  {away:"Oklahoma", home:"Michigan", why:"81% of the money on Oklahoma after they moved +2.5 → -5. Steam chase. Sit both sides. Michigan 17-10.", an:"Action 3:18p MT · 79/81 · 98,020 bets", key:"okla", final:"10-17"},
+  {away:"Oregon", home:"Oklahoma State", why:"78% of the money on Oregon after they moved -17.5 → -24. Steam chase. Sit both sides. Not a dog ticket. Oregon lost 31-39.", an:"Action 3:18p MT · 68/78", key:"oregon", final:"31-39"},
+  {away:"Bowling Green", home:"Nebraska", why:"99% of the money on Nebraska after +25.5 → +30.5. Steam chase. Sit.", an:"Action 3:18p MT"},
+  {away:"Louisiana Tech", home:"LSU", why:"91% of the money on LSU after +31.5 → +34.5. Steam chase. Sit.", an:"Action 3:18p MT"}
 ];
 const CLERK = [
-  {away:"Oklahoma", home:"Michigan", total:43.5, spread:"OU -5.5", why:"Total 43.5 < 55. Not on the frozen watch list. Action 82/91 on Oklahoma after +2.5 flipped to -5.5. Money on the steam side kills any lean.", an:"Action 9/9 · 82% tix OU / 91% money · 17,862 bets", key:"okla"},
-  {away:"Arizona State", home:"Texas A&M", total:50.5, spread:"TA&M -14.5", why:"Total under the cut. Spread not on the frozen seven. Sit.", an:"Action 9/9 · ASU 28/60 vs TAMU 72/40"},
-  {away:"Penn State", home:"Temple", total:51.5, spread:"PSU -24.5", why:"51.5 sits the under. Lay 24 is not a watch.", an:"Action 9/9 · PSU 54/85"},
-  {away:"Washington State", home:"Kansas State", total:49.5, spread:"KSU -17.5", why:"Total under the cut. Sit."},
-  {away:"Old Dominion", home:"Virginia Tech", total:47.5, spread:"VT -19.5", why:"Total under the cut. Sit."},
-  {away:"Wake Forest", home:"Purdue", total:49.5, spread:"WAKE -3", why:"Under sits at 49.5. Spread is Watch #3 Purdue +3.", an:"See watch list."},
-  {away:"South Florida", home:"Army", total:46.5, spread:"Army -3", why:"Total under the cut. Sit."},
-  {away:"Alabama", home:"Kentucky", total:48.5, spread:"ALA -10", why:"48.5 sits the under. Laying 10 is a trap number on this desk.", an:"Action 9/9 · ALA 84/91"},
-  {away:"Arizona", home:"BYU", total:48.5, spread:"BYU -7.5", why:"Total under the cut. Sit."},
-  {away:"Mississippi State", home:"Minnesota", total:54.5, spread:"MSST -1.5", why:"54.5 is under the cut by half a point. Spread is Watch #7.", an:"See watch list."},
-  {away:"Duke", home:"Illinois", total:51.5, spread:"ILL -6", why:"Total under the cut. Sit."},
-  {away:"Eastern Michigan", home:"Michigan State", total:50.5, spread:"MSU -17.5", why:"Total under the cut. Sit."},
-  {away:"Maryland", home:"UConn", total:52.5, spread:"MD -11.5", why:"Total under the cut. Sit."},
-  {away:"UL Monroe", home:"UAB", total:54.5, spread:"UAB -9.5", why:"54.5 sits. Half a point short of the study."},
-  {away:"Delaware", home:"Vanderbilt", total:54.5, spread:"VAN -21", why:"54.5 sits. Delaware is FBS. Still under the cut."},
-  {away:"Buffalo", home:"FIU", total:47.5, spread:"FIU -10", why:"Total under the cut. Sit."},
-  {away:"Jacksonville State", home:"Ohio", total:49.5, spread:"OHIO -2.5", why:"Total under the cut. Sit."},
-  {away:"Tulsa", home:"Sam Houston", total:51.5, spread:"TLSA -13.5", why:"Total under the cut. Sit."},
-  {away:"South Alabama", home:"Tulane", total:49.5, spread:"TULN -9.5", why:"Total under the cut. Sit."},
-  {away:"Georgia State", home:"Kennesaw State", total:54.5, spread:"KENN -8.5", why:"54.5 sits. Both FBS."},
-  {away:"San Diego State", home:"UCLA", total:54.5, spread:"UCLA -12.5", why:"54.5 sits. Half a point short."},
-  {away:"Ohio State", home:"Texas", total:49.5, spread:"TEX -1.5", why:"Under sits at 49.5. Spread is Watch #5.", an:"See watch list."},
-  {away:"Texas Tech", home:"Oregon State", total:52.5, spread:"TTU -25.5", why:"Total under the cut. Sit."},
-  {away:"Iowa State", home:"Iowa", total:41.5, spread:"IOWA -14", why:"Lowest FBS-FBS total on the board. Sit."},
-  {away:"New Mexico State", home:"Hawaii", total:50.5, spread:"HAW -7", why:"Total under the cut. Sit."},
-  {away:"Bowling Green", home:"Nebraska", total:50.5, spread:"NEB -30.5", why:"Total under the cut. Sit."}
-];
-const FCS_SIT = [
-  {away:"Howard", home:"Indiana", total:65.5, why:"FCS vs FBS. Price on the board, not a ticket."},
-  {away:"Wagner", home:"James Madison", total:55.5, why:"FCS vs FBS. Sit."},
-  {away:"Gardner-Webb", home:"Liberty", total:55.5, why:"FCS vs FBS. Sit."},
-  {away:"UT Martin", home:"West Virginia", total:55.5, why:"FCS vs FBS. Sit."},
-  {away:"Weber State", home:"Colorado", total:55.5, why:"FCS vs FBS. Sit."},
-  {away:"UC Davis", home:"SMU", total:58.5, why:"FCS vs FBS. Sit."},
-  {away:"Campbell", home:"Florida", total:65.5, why:"FCS vs FBS. Sit."},
-  {away:"Southern", home:"Houston", total:60.5, why:"Southern University is SWAC / FCS. Sit."},
-  {away:"Towson", home:"South Carolina", total:56.5, why:"FCS vs FBS. Sit."},
-  {away:"Western Carolina", home:"Cincinnati", total:60.5, why:"FCS vs FBS. Sit."},
-  {away:"Southern Utah", home:"Colorado State", total:56.5, why:"FCS vs FBS. Sit."},
-  {away:"West Georgia", home:"Arkansas State", total:56.5, why:"FCS vs FBS. Sit."},
-  {away:"Grambling", home:"TCU", total:55.5, why:"FCS vs FBS. Sit."},
-  {away:"Prairie View", home:"Baylor", total:55.5, why:"FCS vs FBS. Sit."},
-  {away:"Cal Poly", home:"San Jose State", total:56.5, why:"FCS vs FBS. Sit."},
-  {away:"ETSU", home:"North Carolina", total:54.5, why:"FCS vs FBS, and under the cut besides."},
-  {away:"Villanova", home:"Louisville", total:null, why:"FCS. Final 13-59."},
-  {away:"Norfolk State", home:"Virginia", total:null, why:"FCS. Final 3-59."},
-  {away:"Richmond", home:"NC State", total:null, why:"FCS. Final 0-73."},
-  {away:"Florida A&M", home:"Miami", total:null, why:"FCS. Final 7-77."}
+  {away:"Ohio State", home:"Texas", spread:"OSU +2", why:"3:18 even 35/36. No RLM, no money gap. Sit. Old frozen +2 is dead.", an:"Action 3:18p MT · 35% tix / 36% money", key:"ohiost"},
+  {away:"Alabama", home:"Kentucky", spread:"ALA -8", why:"79/66 on Alabama. Laying 8 is outside the toss. Sit.", an:"Action 3:18p MT · 79/66"},
+  {away:"Wake Forest", home:"Purdue", spread:"WAKE -3", why:"58/50. Gap 8. Flat. Sit.", an:"See sat-kept Purdue."},
+  {away:"Missouri", home:"Kansas", spread:"MIZ -4", why:"69/56. |4| outside toss, gap 13 < 15. Flat. Sit.", an:"See sat-kept Kansas."}
 ];
 const NFL = [
-  {rank:2, line:"Chicago -2.5", juice:"live overlay", away:"Chicago", home:"Carolina", kick:"Sun 1:00p ET", why:"Gap 21, no EDGE. 69/84 on Chicago. Line held at -2.5.", take:true},
-  {rank:1, line:"Tampa Bay +3.5", juice:"live overlay", away:"Tampa Bay", home:"Cincinnati", kick:"Sun 1:00p ET", why:"Better OL is the dog. 55/70 on TB. Line held.", take:true},
-  {rank:3, line:"Houston +1.5", juice:"live overlay", away:"Buffalo", home:"Houston", kick:"Sun 1:00p ET", why:"Buffalo has the OL. Houston has two top-10 EDGEs. Action 47/48.", take:true},
-  {rank:4, line:"Philadelphia -4", juice:"live overlay", away:"Washington", home:"Philadelphia", kick:"Sun 4:25p ET", why:"Biggest OL gap. 60% tickets PHI.", take:true},
+  {rank:2, line:"Chicago -3", juice:"-106", away:"Chicago", home:"Carolina", kick:"Sun 1:00p ET", why:"Gap 21, no EDGE. 69/84 on Chicago.", take:true},
+  {rank:1, line:"Tampa Bay +4", juice:"-111", away:"Tampa Bay", home:"Cincinnati", kick:"Sun 1:00p ET", why:"Better OL is the dog. 55/70 on TB.", take:true},
+  {rank:3, line:"Houston +1", juice:"-101", away:"Buffalo", home:"Houston", kick:"Sun 1:00p ET", why:"Buffalo has the OL. Houston has two top-10 EDGEs. Action 47/48.", take:true},
+  {rank:4, line:"Philadelphia -5.5", juice:"-104", away:"Washington", home:"Philadelphia", kick:"Sun 4:25p ET", why:"Biggest OL gap. 60% tickets PHI.", take:true},
   {rank:null, line:"Sit", juice:"", away:"New England", home:"Seattle", kick:"Final 10-13", why:"Gap 2. Sit the opener.", take:false, final:"10-13"},
   {rank:null, line:"Sit", juice:"", away:"San Francisco", home:"Los Angeles", kick:"Final 27-7", why:"Gap 1. Sit Thursday.", take:false, final:"27-7"},
   {rank:null, line:"Sit", juice:"", away:"Minnesota", home:"Green Bay", kick:"Sun 4:25p ET", why:"Opened GB favorite. Market flipped. HANDLE_LATE.", take:false},
-  {rank:null, line:"Sit", juice:"", away:"Arizona", home:"LA Chargers", kick:"Sun 4:25p ET", why:"Chargers laying 10.5. Trap stays dead.", take:false},
+  {rank:null, line:"Sit", juice:"", away:"Arizona", home:"LA Chargers", kick:"Sun 4:25p ET", why:"Chargers laying a touchdown. Trap stays dead.", take:false},
   {rank:null, line:"Sit", juice:"", away:"NY Jets", home:"Tennessee", kick:"Sun 1:00p ET", why:"Jets +22 money. Not an OL TAKE.", take:false}
 ];
 const W1U = [["Oklahoma State @ Tulsa","u58.5","34","W"],["Coastal Carolina @ West Virginia","u56.5","55","W"],["UNLV @ Hawaii","u56.5","27","W"],["Texas State @ Texas","u60","66","L"],["Ball State @ Ohio State","u56.5","59","L"],["San Jose State @ Eastern Michigan","u55.5","48","W"],["Baylor @ Auburn","u59","33","W"],["North Texas @ Indiana","u57","68","L"],["FAU @ Florida","u59.5","87","L"]];

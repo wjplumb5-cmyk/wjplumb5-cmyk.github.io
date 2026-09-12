@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Desk — full slate, filter decides the count</title>
-  <meta name="description" content="Every Week 2 game is clerked. The filter decides how many are worth action. Action Network never mints a TAKE." />
+  <title>Desk — spreads are the board</title>
+  <meta name="description" content="Action handles clerk every Week 2 spread. Unders stay the study. Filter decides the count." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -38,7 +38,7 @@
     .stack { display: flex; flex-direction: column; gap: 10px; padding: 4px 16px 8px; }
     .ticket { display: block; width: 100%; text-align: left; background: var(--card); border: 0; padding: 14px; box-shadow: inset 0 0 0 1px var(--hair), 6px 6px 0 color-mix(in oklab, var(--primary) 12%, transparent); }
     .ticket.live { box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--watch) 55%, transparent), 6px 6px 0 color-mix(in oklab, var(--watch) 18%, transparent); }
-    .ticket.sit { opacity: .78; box-shadow: inset 0 0 0 1px var(--border); }
+    .ticket.sit { opacity: .9; box-shadow: inset 0 0 0 1px var(--border); }
     .row { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
     .rank { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--primary); }
     .rank.watch { color: var(--watch); }
@@ -58,7 +58,6 @@
     .prose ol { padding-left: 1.2rem; }
     .dock { position: fixed; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; padding: 8px 16px calc(8px + env(safe-area-inset-bottom)); background: color-mix(in oklab, var(--bg) 92%, transparent); border-top: 1px solid var(--border); backdrop-filter: blur(10px); }
     .hidden { display: none; }
-    .tag { font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--subtle); }
   </style>
 </head>
 <body>
@@ -66,45 +65,45 @@
     <header class="top">
       <div>
         <p class="kicker" id="leagueKicker">CFB W2</p>
-        <h1 id="pageTitle">Full slate</h1>
+        <h1 id="pageTitle">Spreads</h1>
       </div>
       <nav class="tabs" aria-label="League">
         <button type="button" class="on" id="btnCfb">CFB</button>
         <button type="button" id="btnNfl">NFL</button>
       </nav>
     </header>
-    <p class="season">Season <span>Unders 5–4</span> <span style="color:var(--watch)">Watch 2–3</span></p>
+    <p class="season" id="seasonLine">Season <span style="color:var(--watch)">Action 1–1</span> <span>Mixed 4–6</span> <span>Unders 8–6</span></p>
     <div id="cfb">
       <div class="market">
-        <button type="button" class="on" id="btnUnders">Unders</button>
-        <button type="button" id="btnWatch">Spreads</button>
+        <button type="button" class="on" id="btnWatch">Spreads</button>
+        <button type="button" id="btnUnders">Unders</button>
         <button type="button" id="btnSits">Clerk</button>
       </div>
-      <div id="underBoard"></div>
-      <div id="watchBoard" class="hidden"></div>
+      <div id="watchBoard"></div>
+      <div id="underBoard" class="hidden"></div>
       <div id="sitBoard" class="hidden"></div>
     </div>
     <div id="nfl" class="hidden"></div>
+    <div id="resultsBoard" class="hidden"></div>
     <div id="notes" class="hidden prose">
       <p class="kicker">Notes</p>
-      <h2>The cap is gone. The filter is not.</h2>
-      <p>Every Week 2 game is run through the locked rules. The website no longer stops at 10 unders or 7 watches. The count of games worth action is the output of the filter. It can be 5, 10, or 20.</p>
+      <h2>Spreads are the board</h2>
+      <p>Action ticket %, money %, and reverse line move clerk every FBS–FBS game. Toss (|spread| ≤ 3.5) on RLM, money ≥12 off tickets, or follow ≥65/65. If follow and RLM disagree, follow wins. Extended handle out to 10.5 with a 15-point money gap and 5,000+ bets. Steam-chase sits both sides. It does not mint the dog.</p>
+      <h2>3–6 is mixed. Action this week is the clerk, not that pile.</h2>
+      <p>Week 1 coin-toss watches (2–3) never saw Action. Saturday we kept Purdue and Kansas after the 3:18 clerk sat them. Army faded 75/70 tickets and money on USF. Rutgers lost. Miss St covering PK is Action, not mixed. Do not quote 33% as the clerk.</p>
       <h2>CFB unders — W12_T55_U_v1</h2>
-      <p>Weeks 1–2, FBS vs FBS, under if any shopped total is 55 or higher. Skip −115 or worse. Paper if Pinnacle already has the study in the price, or if Action money on the over is 65% or more. Week 2 size is 1u at −105 or better, else 0.5u. Saturday correlation cap 3.0u — warn, do not auto-drop, do not size up. FCS vs FBS is a price on the board, not a ticket.</p>
-      <p>Study: 56.4% on n=473. Totals are ESPN shopped numbers. Action week-2 totals splits were not on the 9/9 stamp. Do not invent over-money.</p>
-      <h2>CFB spreads — watch only</h2>
-      <p>Frozen week-2 leans stay the only watches. Every other spread is clerked with the Action 9/9/26 6:14 p.m. MT board and then sits. Splits confirm or kill. They do not add a ticket.</p>
+      <p>Weeks 1–2, FBS vs FBS, under if any shopped total is 55 or higher. Skip −115. Paper if 65%+ of Action money is on the over. Study: 56.4% on n=473.</p>
       <h2>NFL — NFL_W1_OLGAP_v0</h2>
-      <p>Spreads only. Totals stay sit. OL gap of 15 or more is the cut. Top-10 EDGE can veto. Laying 7 or more is a trap. Action money on the TAKE after the line moved sits that game.</p>
+      <p>Spreads only. Totals stay sit. OL gap of 15 or more is the cut. Top-10 EDGE can veto. Laying 7 or more is a trap.</p>
     </div>
   </div>
   <nav class="dock" aria-label="Desk">
-    <button type="button" class="on" id="tabPicks">Picks</button>
+    <button type="button" class="on" id="tabPicks">Spreads</button>
     <button type="button" id="tabNflDock">NFL</button>
     <button type="button" id="tabNotes">Notes</button>
     <button type="button" id="tabResults">Results</button>
   </nav>
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+  <script src="data.js?v=912c"></script>
+  <script src="app.js?v=912c"></script>
 </body>
 </html>
