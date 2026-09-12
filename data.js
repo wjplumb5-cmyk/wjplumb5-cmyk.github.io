@@ -48,10 +48,10 @@ const CLERK = [
   {away:"Missouri", home:"Kansas", spread:"MIZ -4", why:"69/56. |4| outside toss, gap 13 < 15. Flat. Sit.", an:"See sat-kept Kansas."}
 ];
 const NFL = [
-  {rank:2, line:"Chicago -3", juice:"-106", away:"Chicago", home:"Carolina", kick:"Sun 1:00p ET", why:"Gap 21, no EDGE. 69/84 on Chicago.", take:true},
-  {rank:1, line:"Tampa Bay +4", juice:"-111", away:"Tampa Bay", home:"Cincinnati", kick:"Sun 1:00p ET", why:"Better OL is the dog. 55/70 on TB.", take:true},
-  {rank:3, line:"Houston +1", juice:"-101", away:"Buffalo", home:"Houston", kick:"Sun 1:00p ET", why:"Buffalo has the OL. Houston has two top-10 EDGEs. Action 47/48.", take:true},
-  {rank:4, line:"Philadelphia -5.5", juice:"-104", away:"Washington", home:"Philadelphia", kick:"Sun 4:25p ET", why:"Biggest OL gap. 60% tickets PHI.", take:true},
+  {rank:2, line:"Chicago -3", juice:"-106", away:"Chicago", home:"Carolina", kick:"Sun 1:00p ET", why:"Gap 21, no EDGE. 69/84 on Chicago. Open −2.5, live Pin −3. With the money, not a flip.", take:true},
+  {rank:1, line:"Tampa Bay +4", juice:"-111", away:"Tampa Bay", home:"Cincinnati", kick:"Sun 1:00p ET", why:"Better OL is the dog. Action 55/70 on TB +3.5. Live Pin +4.", take:true},
+  {rank:3, line:"Houston +1", juice:"-102", away:"Buffalo", home:"Houston", kick:"Sun 1:00p ET", why:"Buffalo has the OL. Houston has two top-10 EDGEs. Action 47/48. Live Pin +1.", take:true},
+  {rank:4, line:"Philadelphia -5.5", juice:"-104", away:"Washington", home:"Philadelphia", kick:"Sun 4:25p ET", why:"Biggest OL gap. Tickets 60% PHI. Live Pin −5.5. Still under the 7 trap.", take:true},
   {rank:null, line:"Sit", juice:"", away:"New England", home:"Seattle", kick:"Final 10-13", why:"Gap 2. Sit the opener.", take:false, final:"10-13"},
   {rank:null, line:"Sit", juice:"", away:"San Francisco", home:"Los Angeles", kick:"Final 27-7", why:"Gap 1. Sit Thursday.", take:false, final:"27-7"},
   {rank:null, line:"Sit", juice:"", away:"Minnesota", home:"Green Bay", kick:"Sun 4:25p ET", why:"Opened GB favorite. Market flipped. HANDLE_LATE.", take:false},
