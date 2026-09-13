@@ -86,7 +86,7 @@ function renderNfl() {
   const tonight = NFL.filter(g => !g.take && !g.final);
   const done = NFL.filter(g => !g.take && g.final);
   document.getElementById("nfl").innerHTML =
-    '<div class="note"><p class="lbl take">Take · OL / EDGE</p><p class="body">Sibling card. Totals stay sit. Action is the clerk. Circa is the check. Never average. Never add a ticket from the second book. Cowboys–Giants is a sit.</p></div>' +
+    '<div class="note"><p class="lbl take">Take · paper, not a study</p><p class="body">NFL weeks 1–2 have no registered filter. Four OL tickets are paper, 1–3, 0u. Action is the clerk. Circa is the check. Cowboys–Giants is a sit. The model is on Notes.</p></div>' +
     '<p class="season">NFL OL ' + recordLine(takes) + " · 0u paper · " + tonight.length + " still open</p>" +
     '<p class="day">Sunday takes</p><div class="stack">' +
     takes.map(g => card(g, "take")).join("") +
