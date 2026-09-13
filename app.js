@@ -53,19 +53,26 @@ function recordLine(rows) {
 function paintSeason() {
   const mixed = W1S.map(r => ({ result: r[2] })).concat(SAT_KEPT, FADE, WATCHES);
   const unders = W1U.map(r => ({ result: r[3] })).concat(TAKES);
+  const nflTakes = NFL.filter(g => g.take);
   const el = document.getElementById("seasonLine");
   if (el) {
-    el.innerHTML = "Season <span style=\"color:var(--watch)\">Action " + recordLine(WATCHES) + "</span> <span>Mixed " + recordLine(mixed) + "</span> <span>Unders " + recordLine(unders) + "</span>";
+    el.innerHTML = "Season <span style=\"color:var(--watch)\">Action " + recordLine(WATCHES) + "</span> <span>Mixed " + recordLine(mixed) + "</span> <span>Unders " + recordLine(unders) + "</span> <span>NFL " + recordLine(nflTakes) + "</span>";
   }
 }
 function renderResults() {
   const action = WATCHES.filter(w => w.result);
   const unders = TAKES.filter(t => t.result);
+  const nflTakes = NFL.filter(g => g.take);
+  const nflOpen = NFL.filter(g => !g.take && !g.final);
+  const nflSitDone = NFL.filter(g => !g.take && g.final);
   const el = document.getElementById("resultsBoard");
   if (!el) return;
   el.innerHTML =
-    '<div class="note"><p class="lbl watch">Results · split the books</p><p class="body">Action clerk is the spread tab. Mixed piled three other books on top. Do not quote 33% as the clerk.</p></div>' +
-    '<p class="season">Action ' + recordLine(WATCHES) + " · sat-kept " + recordLine(SAT_KEPT) + " · faded follow " + recordLine(FADE) + "</p>" +
+    '<div class="note"><p class="lbl watch">Results · both leagues</p><p class="body">Action clerk is the CFB spread tab. NFL OL takes are a sibling book, 0u paper. Circa is the NFL check so Action’s sample cannot strand us. Do not quote mixed 3–6 as the clerk.</p></div>' +
+    '<p class="season">CFB Action ' + recordLine(WATCHES) + " · NFL OL " + recordLine(nflTakes) + " · sat-kept " + recordLine(SAT_KEPT) + " · faded follow " + recordLine(FADE) + "</p>" +
+    '<p class="day">NFL OL takes · graded</p><div class="stack">' + nflTakes.map(r => card(r, "take")).join("") + "</div>" +
+    '<p class="day">NFL tonight · sit</p><div class="stack">' + nflOpen.map(r => card(r, "sit")).join("") + "</div>" +
+    '<p class="day">NFL sits that finished · not on the rate</p><div class="stack">' + nflSitDone.map(r => card(r, "sit")).join("") + "</div>" +
     '<p class="day">Action clerk · graded</p><div class="stack">' + (action.length ? action.map(r => card(r, "watch")).join("") : "") + "</div>" +
     '<p class="day">Clerk sat · we kept it</p><div class="stack">' + SAT_KEPT.map(r => card(r, "sat")).join("") + "</div>" +
     '<p class="day">Faded a 65/65 follow</p><div class="stack">' + FADE.map(r => card(r, "fade")).join("") + "</div>" +
@@ -74,12 +81,21 @@ function renderResults() {
     "<h2>Week 1 spreads 2–3 · no Action</h2><ol>" + W1S.map(r => "<li>" + r[0] + " → " + r[1] + " <strong>" + r[2] + "</strong></li>").join("") + "</ol></div>";
 }
 renderUnders(); renderWatches(); renderClerk();
-document.getElementById("nfl").innerHTML =
-  '<div class="note"><p class="lbl take">Take · OL / EDGE</p><p class="body">Sibling card. Totals stay sit. Four Sunday takes.</p></div>' +
-  '<p class="season">4 of 4 Sunday takes</p><p class="day">Sunday, Sep 13</p><div class="stack">' +
-  NFL.filter(g => g.take).sort((a,b) => a.kick.localeCompare(b.kick) || a.rank - b.rank).map(g => card(g, "take")).join("") +
-  '</div><p class="day">Already final / handle sits</p><div class="stack">' +
-  NFL.filter(g => !g.take).map(g => card(g, "sit")).join("") + "</div>";
+function renderNfl() {
+  const takes = NFL.filter(g => g.take).sort((a,b) => (a.rank || 99) - (b.rank || 99));
+  const tonight = NFL.filter(g => !g.take && !g.final);
+  const done = NFL.filter(g => !g.take && g.final);
+  document.getElementById("nfl").innerHTML =
+    '<div class="note"><p class="lbl take">Take · OL / EDGE</p><p class="body">Sibling card. Totals stay sit. Action is the clerk. Circa is the check. Never average. Never add a ticket from the second book. Cowboys–Giants is a sit.</p></div>' +
+    '<p class="season">NFL OL ' + recordLine(takes) + " · 0u paper · " + tonight.length + " still open</p>" +
+    '<p class="day">Sunday takes</p><div class="stack">' +
+    takes.map(g => card(g, "take")).join("") +
+    '</div><p class="day">Tonight · sit</p><div class="stack">' +
+    tonight.map(g => card(g, "sit")).join("") +
+    '</div><p class="day">Already final / handle sits</p><div class="stack">' +
+    done.map(g => card(g, "sit")).join("") + "</div>";
+}
+renderNfl();
 document.getElementById("notes").insertAdjacentHTML("beforeend",
   "<h2>The 3–6 is mixed</h2><p>Week 1 coin-toss watches 2–3 never saw Action. Saturday we kept Purdue and Kansas after the 3:18 clerk sat them (1–1). Army faded 75/70 on USF (0–1). Action clerk starts at Rutgers. Miss St covering PK is Action, not mixed. That pile is not the Action rate.</p>" +
   "<h2>Week 1 unders 5–4</h2><ol>" + W1U.map(r => "<li>" + r[0] + " " + r[1] + " → " + r[2] + " <strong>" + r[3] + "</strong></li>").join("") + "</ol>" +
@@ -95,7 +111,7 @@ function show(which) {
   document.getElementById("nfl").classList.toggle("hidden", which !== "nfl");
   document.getElementById("notes").classList.toggle("hidden", which !== "notes");
   document.getElementById("resultsBoard").classList.toggle("hidden", which !== "results");
-  document.getElementById("leagueKicker").textContent = which === "nfl" ? "NFL W1" : which === "notes" ? "Desk" : which === "results" ? "CFB W2" : "CFB W2";
+  document.getElementById("leagueKicker").textContent = which === "nfl" ? "NFL W1" : which === "notes" ? "Desk" : which === "results" ? "Both leagues" : "CFB W2";
   document.getElementById("pageTitle").textContent = which === "nfl" ? "Spread picks" : which === "notes" ? "How it works" : which === "results" ? "Results" : "Spreads";
 }
 function setMarket(which) {
@@ -128,7 +144,10 @@ const KEYS = {
   mtsu: ["Middle Tennessee", "Marshall"], wku: ["Western Kentucky", "Georgia"], rice: ["Rice", "Notre Dame"],
   usu: ["Utah State", "Washington"], ucf: ["UCF", "Pittsburgh"], mem: ["Memphis", "Boise State"],
   latech: ["Louisiana Tech", "LSU"], ark: ["Arkansas", "Utah"], buf: ["Buffalo", "Florida International"],
-  nmsu: ["New Mexico State", "Hawai"], army: ["South Florida", "Army"], gsu: ["Georgia State", "Kennesaw"]
+  nmsu: ["New Mexico State", "Hawai"], army: ["South Florida", "Army"], gsu: ["Georgia State", "Kennesaw"],
+  tbcin: ["Tampa Bay", "Cincinnati"], chicar: ["Chicago", "Carolina"], bufhou: ["Buffalo", "Houston"],
+  wasphi: ["Washington", "Philadelphia"], dalnyg: ["Dallas", "New York Giants"], denkc: ["Denver", "Kansas City"],
+  gbmin: ["Green Bay", "Minnesota"], arilac: ["Arizona", "Los Angeles Chargers"], nyjten: ["NY Jets", "Tennessee"]
 };
 function gradeTake(t, pts) {
   const n = t.line.replace(/[^\d.]/g, "");
@@ -181,7 +200,36 @@ async function refreshLive() {
       const row = w.key && live[w.key];
       if (row && (/final/i.test(row.clock || "") || row.state === "post") && !w.result) gradeSpread(w, row.pts);
     }
+    try {
+      const nr = await fetch("https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20260909-20260915&limit=50");
+      const nd = await nr.json();
+      for (const ev of nd.events || []) {
+        const st = (ev.status && ev.status.type) || {};
+        const teams = (ev.competitions && ev.competitions[0] && ev.competitions[0].competitors) || [];
+        const away = teams.find(t => t.homeAway === "away");
+        const home = teams.find(t => t.homeAway === "home");
+        if (!away || !home) continue;
+        const an = away.team.displayName, hn = home.team.displayName;
+        const pts = away.score + "-" + home.score;
+        const clock = st.shortDetail || "";
+        for (const key of Object.keys(KEYS)) {
+          const pair = KEYS[key];
+          if (an.indexOf(pair[0].split(" ")[0]) >= 0 && hn.indexOf(pair[1].split(" ")[0]) >= 0) {
+            live[key] = { pts: pts, clock: clock, state: st.state };
+          }
+        }
+      }
+      for (const g of NFL) {
+        const row = g.key && live[g.key];
+        if (row && (/final/i.test(row.clock || "") || row.state === "post") && !g.result && g.take) gradeSpread(g, row.pts);
+        if (row && (/final/i.test(row.clock || "") || row.state === "post") && !g.take) {
+          g.final = row.pts;
+          g.kick = "Final " + row.pts;
+        }
+      }
+    } catch (e2) {}
     renderUnders(); renderWatches(); renderClerk();
+    renderNfl();
     paintSeason();
     renderResults();
   } catch (e) {}
